@@ -4,16 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".StaveActivity">
 
-    <TextureView
-        android:id="@+id/texture"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp" />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 
     <ImageButton
         android:id="@+id/menuButton"
@@ -24,19 +20,19 @@
         app:srcCompat="@drawable/menu" />
 
     <ImageButton
-        android:id="@+id/uploadButton"
+        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        app:srcCompat="@drawable/upload" />
+        app:srcCompat="@drawable/backtrack" />
 
     <ImageButton
-        android:id="@+id/cameraButton"
+        android:id="@+id/playButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/camera" />
+        app:srcCompat="@drawable/play" />
 
 </RelativeLayout>

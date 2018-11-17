@@ -1,8 +1,11 @@
 package qualityoverquantity.hexagrama;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
@@ -15,8 +18,10 @@ import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -27,13 +32,19 @@ import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
 import org.audiveris.omr.Main;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int GET_FROM_GALLERY = 1;
+
     TextureView textureView;
     CameraDevice cameraDevice;
 
@@ -44,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     CaptureRequest.Builder captureRequestBuilder;
     CameraCaptureSession cameraSession;
 
+    private	Intent	staveIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +66,27 @@ public class MainActivity extends AppCompatActivity {
 
         textureView.setSurfaceTextureListener(surfaceTextureListener);
 
+        ImageButton button = (ImageButton)findViewById(R.id.uploadButton);
+        button.setOnClickListener(uploadListener);
+
+    }
+
+    private View.OnClickListener uploadListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
+            staveIntent.putExtra("staveImage",	selectedImage.toString());
+            startActivity(staveIntent);
+        }
     }
 
     TextureView.SurfaceTextureListener surfaceTextureListener = new TextureView.SurfaceTextureListener() {
