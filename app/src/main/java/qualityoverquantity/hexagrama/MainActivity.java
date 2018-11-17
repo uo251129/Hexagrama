@@ -6,10 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
-import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -19,31 +16,33 @@ import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.util.Size;
-import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
-import org.audiveris.omr.Main;
-
-import java.io.FileNotFoundException;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     public static final int GET_FROM_GALLERY = 1;
+    public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
+    public static final int MY_PERMISSIONS_REQUEST_CAMERA = 3;
 
     TextureView textureView;
     CameraDevice cameraDevice;
@@ -54,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     HandlerThread handlerThread;
     CaptureRequest.Builder captureRequestBuilder;
     CameraCaptureSession cameraSession;
+
+    private CaptureRequest mPreviewRequest;
 
     private	Intent	staveIntent;
 
@@ -69,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
         ImageButton button = (ImageButton)findViewById(R.id.uploadButton);
         button.setOnClickListener(uploadListener);
 
+        ImageButton button2 = (ImageButton)findViewById(R.id.cameraButton);
+        button2.setOnClickListener(cameraListener);
+
     }
 
     private View.OnClickListener uploadListener = new View.OnClickListener() {
@@ -76,6 +80,48 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
         }
     };
+
+    private View.OnClickListener cameraListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            FileOutputStream outputPhoto = null;
+            try {
+                Bitmap bitmap = textureView.getBitmap();
+                Uri selectedImage = getImageUri(MainActivity.this, bitmap);
+                staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
+                staveIntent.putExtra("staveImage",	selectedImage.toString());
+                startActivity(staveIntent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (outputPhoto != null) {
+                        outputPhoto.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+
+    private Uri getImageUri(Context context, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+            }
+        }
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    private File createImageFile(File galleryFolder) throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "image_" + timeStamp + "_";
+        return File.createTempFile(imageFileName, ".jpg", galleryFolder);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -124,14 +170,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.CAMERA},
+                        MY_PERMISSIONS_REQUEST_CAMERA);
+            }
         }
         cameraManager.openCamera(cameraId, stateCallback, null);
     }
