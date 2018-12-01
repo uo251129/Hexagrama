@@ -21,7 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StaveActivity"></activity>
+        <activity android:name=".StaveActivity" />
+        <activity android:name=".MenuActivity"></activity>
     </application>
 
 </manifest>
