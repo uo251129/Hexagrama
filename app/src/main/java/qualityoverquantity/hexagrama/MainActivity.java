@@ -21,9 +21,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.provider.MediaStore;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 import android.view.TextureView;
@@ -39,7 +41,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+import qualityoverquantity.hexagrama.util.State;
+
+public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
     public static final int GET_FROM_GALLERY = 1;
     public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 3;
@@ -55,8 +59,10 @@ public class MainActivity extends AppCompatActivity {
     CameraCaptureSession cameraSession;
 
     private CaptureRequest mPreviewRequest;
+    private  TextToSpeech tts;
 
     private	Intent	staveIntent;
+    private Intent menuIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         ImageButton button2 = (ImageButton)findViewById(R.id.cameraButton);
         button2.setOnClickListener(cameraListener);
 
+        tts = new TextToSpeech(this,this);
     }
 
     private View.OnClickListener uploadListener = new View.OnClickListener() {
@@ -280,5 +287,33 @@ public class MainActivity extends AppCompatActivity {
 
         backgroundHandler = null;
         handlerThread = null;
+    }
+
+    public void openMenu(View view) {
+        menuIntent	=	new	Intent(MainActivity.this,MenuActivity.class);
+        startActivity(menuIntent);
+    }
+
+    private void initialInstructionsSpeak() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            tts.speak(getResources().getString(R.string.initial_instructions_speak),
+                    TextToSpeech.QUEUE_ADD, null, null);
+        }
+        else
+        {
+            tts.speak(getResources().getString(R.string.initial_instructions_speak),
+                    TextToSpeech.QUEUE_ADD, null);
+        }
+    }
+
+    @Override
+    public void onInit(int i) {
+        // configuracion del tts
+        Log.d("Speech", "Set Language");
+        tts.setLanguage(new Locale("es","ES"));
+        tts.setPitch(1);
+        tts.setSpeechRate(1);
+
+        if(State.INSTRUCCIONES_INICIO) initialInstructionsSpeak();
     }
 }

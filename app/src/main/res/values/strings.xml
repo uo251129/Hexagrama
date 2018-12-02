@@ -9,4 +9,8 @@
     <string name="activate">Activar</string>
     <string name="musical">Musical</string>
     <string name="narrator">Narrador</string>
+    <string name="initial_instructions_speak">Bienvenido a hexagrama. Para acceder al menú de
+    configuración haga click en la parte inferior izquierda de la pantalla. Para capturar un
+    pentagrama haga click en la parte inferior central. Para cargar un pentagrama
+    haga click en la parte inferior derecha.</string>
 </resources>

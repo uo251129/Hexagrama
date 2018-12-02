@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MenuActivity">
 
     <LinearLayout
         android:id="@+id/menuLayout"
@@ -19,24 +19,28 @@
             android:text="@string/initial_instructions"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
-        <LinearLayout
+        <RadioGroup
+            android:id="@+id/rbInstructions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <CheckBox
-                android:id="@+id/cbDesactivateInst"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="@string/desactivate" />
-
-            <CheckBox
-                android:id="@+id/cbActivateInst"
-                android:layout_width="wrap_content"
+            <RadioButton
+                android:id="@+id/rbDesactivateInst"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="changeInitialInstructions"
+                android:text="@string/desactivate" />
+
+            <RadioButton
+                android:id="@+id/rbActivateInst"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="changeInitialInstructions"
                 android:text="@string/activate" />
-        </LinearLayout>
+        </RadioGroup>
 
         <TextView
             android:id="@+id/txtOutputType"
@@ -45,24 +49,28 @@
             android:text="@string/output_type"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
-        <LinearLayout
+        <RadioGroup
+            android:id="@+id/rbOutput"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <CheckBox
-                android:id="@+id/cbNarrator"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="@string/narrator" />
-
-            <CheckBox
-                android:id="@+id/cbMusic"
-                android:layout_width="wrap_content"
+            <RadioButton
+                android:id="@+id/rbNarrator"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="changeOutputType"
+                android:text="@string/narrator" />
+
+            <RadioButton
+                android:id="@+id/rbMusic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="changeOutputType"
                 android:text="@string/musical" />
-        </LinearLayout>
+        </RadioGroup>
 
     </LinearLayout>
 
@@ -72,6 +80,7 @@
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:onClick="backCamera"
         app:srcCompat="@drawable/backtrack" />
 
     <ImageButton
