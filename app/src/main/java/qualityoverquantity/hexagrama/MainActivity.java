@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     public static final int GET_FROM_GALLERY = 1;
     public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 3;
+    private SharedPreferences sharedPreferences;
 
     TextureView textureView;
     CameraDevice cameraDevice;
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         ImageButton button2 = (ImageButton)findViewById(R.id.cameraButton);
         button2.setOnClickListener(cameraListener);
 
+        sharedPreferences = getSharedPreferences("MyPreferences",
+                getApplicationContext().MODE_PRIVATE);
         tts = new TextToSpeech(this,this);
     }
 
@@ -314,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         tts.setPitch(1);
         tts.setSpeechRate(1);
 
-        if(State.INSTRUCCIONES_INICIO) initialInstructionsSpeak();
+        if(sharedPreferences.getBoolean("INSTRUCCIONES_INICIO",true))
+            initialInstructionsSpeak();
     }
 }
