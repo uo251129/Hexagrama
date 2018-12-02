@@ -3,4 +3,10 @@
     <string name="request_permission">This sample needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
     <string name="title_activity_stave">StaveActivity</string>
+    <string name="initial_instructions">Instrucciones iniciales</string>
+    <string name="output_type">Tipo de salida</string>
+    <string name="desactivate">Desactivar</string>
+    <string name="activate">Activar</string>
+    <string name="musical">Musical</string>
+    <string name="narrator">Narrador</string>
 </resources>
