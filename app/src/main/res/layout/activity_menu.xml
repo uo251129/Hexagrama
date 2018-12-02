@@ -14,9 +14,10 @@
 
         <TextView
             android:id="@+id/txtInitialInstructions"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/screen_narrator"
+            android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <RadioGroup
@@ -44,9 +45,10 @@
 
         <TextView
             android:id="@+id/txtOutputType"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/output_type"
+            android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <RadioGroup
