@@ -88,8 +88,10 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     private View.OnClickListener uploadListener = new View.OnClickListener() {
         public void onClick(View v) {
-            if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true))
+            if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
+                tts.stop();
                 speak("Cargar pentagrama.");
+            }
             startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
         }
     };
@@ -98,8 +100,10 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         public void onClick(View v) {
             FileOutputStream outputPhoto = null;
             try {
-                if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true))
+                if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
+                    tts.stop();
                     speak("Capturar pentagrama.");
+                }
                 Bitmap bitmap = textureView.getBitmap();
                 Uri selectedImage = getImageUri(MainActivity.this, bitmap);
                 staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
@@ -281,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     @Override
     protected void onPause() {
         try {
+            tts.stop();
             stopBackgroundThread();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -298,7 +303,9 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     }
 
     public void openMenu(View view) {
-        speak("Abrir menú de configuración");
+        if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true))
+            tts.stop();
+            speak("Abrir menú de configuración");
         menuIntent	=	new	Intent(MainActivity.this,MenuActivity.class);
         startActivity(menuIntent);
     }
@@ -326,4 +333,5 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true))
             speak(getResources().getString(R.string.initial_instructions_speak));
     }
+
 }

@@ -57,15 +57,19 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
 
     private View.OnClickListener backListener = new View.OnClickListener() {
         public void onClick(View v) {
-            if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true))
+            if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
+                tts.stop();
                 speak("Volver atrás.");
+            }
             finish();
         }
     };
 
     public void openMenu(View view) {
-        if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true))
+        if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
+            tts.stop();
             speak("Abrir menú de configuración.");
+        }
         menuIntent	=	new	Intent(StaveActivity.this,MenuActivity.class);
         startActivity(menuIntent);
     }
