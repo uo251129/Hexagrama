@@ -3,7 +3,7 @@
     <string name="request_permission">This sample needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
     <string name="title_activity_stave">StaveActivity</string>
-    <string name="initial_instructions">Instrucciones iniciales</string>
+    <string name="screen_narrator">Narrar pantalla</string>
     <string name="output_type">Tipo de salida</string>
     <string name="desactivate">Desactivar</string>
     <string name="activate">Activar</string>
@@ -13,4 +13,12 @@
     configuración haga click en la parte inferior izquierda de la pantalla. Para capturar un
     pentagrama haga click en la parte inferior central. Para cargar un pentagrama
     haga click en la parte inferior derecha.</string>
+    <string name="stave_activity_speak">Se ha capturado el pentagrama. Haga click en la parte
+    inferior central de la pantalla para reproducirlo. Haga click en la parte inferior
+    izquierda para acceder al menú de configuración. Haga click en la parte inferior
+    derecha si desea volver atrás.</string>
+    <string name="menu_activity_speak">Menú de configuración. En la parte inferior dispone
+    de cuatro botones. El primero en la izquierda permite volver a una opción del menú.
+    El segundo le permite seleccionar la configuración. El tercero le permite continuar con
+    otra opción del menú. El último botón le permite volver atrás.</string>
 </resources>

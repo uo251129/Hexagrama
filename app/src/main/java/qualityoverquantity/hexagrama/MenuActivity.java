@@ -2,6 +2,8 @@ package qualityoverquantity.hexagrama;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,12 +11,15 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 
+import java.util.Locale;
+
 import qualityoverquantity.hexagrama.util.State;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
     private RadioButton rbDesactivate, rbActivate, rbNarrator, rbMusic;
     private SharedPreferences sharedPreferences;
+    private TextToSpeech tts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +32,18 @@ public class MenuActivity extends AppCompatActivity {
         rbMusic = findViewById(R.id.rbMusic);
         sharedPreferences = getSharedPreferences("MyPreferences",
                 getApplicationContext().MODE_PRIVATE);
+        tts = new TextToSpeech(this,this);
 
         completeRadioButtons();
     }
 
     public void backCamera(View view) {
+        if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) speak("Volver atrás.");
         finish();
     }
 
     private void completeRadioButtons() {
-        if(sharedPreferences.getBoolean("INSTRUCCIONES_INICIO",true)) {
+        if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
             Log.d("SharedPreferences", "Activando botón activar");
             rbActivate.setChecked(true);
         }
@@ -59,10 +66,10 @@ public class MenuActivity extends AppCompatActivity {
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         if(rbDesactivate.isChecked()) {
             Log.d("SharedPreferences","Se ha seleccionado desactivar instrucciones");
-            editor.putBoolean("INSTRUCCIONES_INICIO", false);
+            editor.putBoolean("NARRADOR_PANTALLA", false);
         } else if (rbActivate.isChecked()) {
             Log.d("SharedPreferences","Se ha seleccionado activar instrucciones");
-            editor.putBoolean("INSTRUCCIONES_INICIO", true);
+            editor.putBoolean("NARRADOR_PANTALLA", true);
         }
 
         editor.commit();
@@ -79,5 +86,26 @@ public class MenuActivity extends AppCompatActivity {
         }
 
         editor.commit();
+    }
+
+    @Override
+    public void onInit(int i) {
+        Log.d("Speech", "Set Language");
+        tts.setLanguage(new Locale("es","ES"));
+        tts.setPitch(1);
+        tts.setSpeechRate(1);
+
+        if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true))
+            speak(getResources().getString(R.string.menu_activity_speak));
+    }
+
+    private void speak(String text) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            tts.speak(text, TextToSpeech.QUEUE_ADD, null, null);
+        }
+        else
+        {
+            tts.speak(text, TextToSpeech.QUEUE_ADD, null);
+        }
     }
 }

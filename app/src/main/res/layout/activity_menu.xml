@@ -16,7 +16,7 @@
             android:id="@+id/txtInitialInstructions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/initial_instructions"
+            android:text="@string/screen_narrator"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <RadioGroup
