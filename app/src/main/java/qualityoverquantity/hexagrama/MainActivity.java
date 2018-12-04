@@ -42,6 +42,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
+import qualityoverquantity.hexagrama.util.RESTRequestSender;
 import qualityoverquantity.hexagrama.util.State;
 
 public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private CaptureRequest mPreviewRequest;
     private  TextToSpeech tts;
     private SharedPreferences sharedPreferences;
+
+    private RESTRequestSender restRequestSender;
 
     private	Intent	staveIntent;
     private Intent menuIntent;
@@ -84,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         sharedPreferences = getSharedPreferences("MyPreferences",
                 getApplicationContext().MODE_PRIVATE);
         tts = new TextToSpeech(this,this);
+        restRequestSender = new RESTRequestSender(this);
     }
 
     private View.OnClickListener uploadListener = new View.OnClickListener() {
@@ -98,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     private View.OnClickListener cameraListener = new View.OnClickListener() {
         public void onClick(View v) {
+            restRequestSender.sendRequest();
+
+
             FileOutputStream outputPhoto = null;
             try {
                 if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
