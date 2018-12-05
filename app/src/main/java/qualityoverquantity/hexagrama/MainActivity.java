@@ -37,9 +37,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import qualityoverquantity.hexagrama.util.RESTRequestSender;
@@ -102,9 +105,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     private View.OnClickListener cameraListener = new View.OnClickListener() {
         public void onClick(View v) {
-            restRequestSender.sendRequest();
-
-
             FileOutputStream outputPhoto = null;
             try {
                 if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
@@ -113,8 +113,14 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 }
                 Bitmap bitmap = textureView.getBitmap();
                 Uri selectedImage = getImageUri(MainActivity.this, bitmap);
+
+                //Request is sended before open next activity
+                InputStream inputStream = getResources().openRawResource(R.raw.notes);
+                ArrayList<String> notes = restRequestSender.sendRequest(inputStream);
+
                 staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
                 staveIntent.putExtra("staveImage",	selectedImage.toString());
+                staveIntent.putStringArrayListExtra("notes", notes);
                 startActivity(staveIntent);
             } catch (Exception e) {
                 e.printStackTrace();
