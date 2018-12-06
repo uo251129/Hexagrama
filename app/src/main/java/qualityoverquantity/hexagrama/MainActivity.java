@@ -347,4 +347,9 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             speak(getResources().getString(R.string.initial_instructions_speak));
     }
 
+    @Override
+    protected void onDestroy() {
+        if (tts.isSpeaking()) tts.stop();
+        super.onDestroy();
+    }
 }

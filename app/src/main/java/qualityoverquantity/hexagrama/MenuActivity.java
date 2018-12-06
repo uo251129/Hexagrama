@@ -183,9 +183,14 @@ public class MenuActivity extends AppCompatActivity implements TextToSpeech.OnIn
     }
 
     @Override
-    protected void onPause() {
-        tts.stop();
-        super.onPause();
+    protected void onDestroy() {
+        if (tts.isSpeaking()) tts.stop();
+        super.onDestroy();
     }
 
+    @Override
+    protected void onPause() {
+        if (tts.isSpeaking()) tts.stop();
+        super.onPause();
+    }
 }

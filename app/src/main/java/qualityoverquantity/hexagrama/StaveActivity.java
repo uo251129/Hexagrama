@@ -120,7 +120,6 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
     }
 
     private void playMusical() {
-        mediaPlayer.setLooping(false);
         for (String note: notes) {
             switch (note) {
                 case ("do"):
@@ -184,5 +183,19 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
         {
             tts.speak(text, TextToSpeech.QUEUE_ADD, null);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        mediaPlayer.stop();
+        if (tts.isSpeaking()) tts.stop();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        mediaPlayer.reset();
+        if (tts.isSpeaking()) tts.stop();
+        super.onPause();
     }
 }
