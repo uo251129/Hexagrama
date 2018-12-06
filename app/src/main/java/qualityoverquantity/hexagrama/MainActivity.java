@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
                 //Request is sended before open next activity
                 InputStream inputStream = getResources().openRawResource(R.raw.notes);
-                ArrayList<String> notes = restRequestSender.sendRequest(inputStream);
+                ArrayList<String> notes = restRequestSender.sendRequest(bitmap);
 
                 staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
                 staveIntent.putExtra("staveImage",	selectedImage.toString());
