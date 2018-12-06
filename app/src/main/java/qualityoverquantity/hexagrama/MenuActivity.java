@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -43,6 +44,9 @@ public class MenuActivity extends AppCompatActivity implements TextToSpeech.OnIn
         listButtons.add(rbMusic);
         selectedButton = rbDesactivate;
         drawSelectedButton();
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setTitle("Configuración");
+        setSupportActionBar(myToolbar);
 
         sharedPreferences = getSharedPreferences("MyPreferences",
                 getApplicationContext().MODE_PRIVATE);

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -32,6 +33,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -44,6 +46,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import qualityoverquantity.hexagrama.util.RESTRequestSender;
 import qualityoverquantity.hexagrama.util.State;
@@ -72,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private	Intent	staveIntent;
     private Intent menuIntent;
 
+    private ImageButton buttonCamera;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         ImageButton button = (ImageButton)findViewById(R.id.uploadButton);
         button.setOnClickListener(uploadListener);
 
-        ImageButton button2 = (ImageButton)findViewById(R.id.cameraButton);
-        button2.setOnClickListener(cameraListener);
+        buttonCamera = (ImageButton)findViewById(R.id.cameraButton);
+        buttonCamera.setOnClickListener(cameraListener);
 
         sharedPreferences = getSharedPreferences("MyPreferences",
                 getApplicationContext().MODE_PRIVATE);
@@ -107,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         public void onClick(View v) {
             FileOutputStream outputPhoto = null;
             try {
+                buttonCamera.setBackgroundColor(Color.GRAY);
                 if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
                     tts.stop();
                     speak("Capturar pentagrama.");

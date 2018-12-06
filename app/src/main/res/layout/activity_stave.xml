@@ -13,10 +13,13 @@
 
     <ImageButton
         android:id="@+id/menuButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="6dp"
+        android:backgroundTint="@color/transparent"
         android:onClick="openMenu"
         app:srcCompat="@drawable/menu" />
 
@@ -26,15 +29,24 @@
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="6dp"
+        android:backgroundTint="@color/transparent"
         app:srcCompat="@drawable/backtrack" />
 
-    <ImageButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/playButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        style="@style/AppTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="7dp"
+        android:clickable="true"
         android:onClick="playStave"
+        app:backgroundTint="@color/whiteTransparent"
+        app:fabCustomSize="60dp"
+        app:fabSize="normal"
         app:srcCompat="@drawable/play" />
 
 </RelativeLayout>

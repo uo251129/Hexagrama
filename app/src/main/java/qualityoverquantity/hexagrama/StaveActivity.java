@@ -102,7 +102,7 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
     public void playStave(View view) {
         if(!isPlaying) {
             isPlaying = true;
-            playButton.setImageResource(R.drawable.pause);
+            playButton.setImageResource(R.drawable.stop);
             if (sharedPreferences.getString("TIPO_SALIDA", "MUSICAL").equals("MUSICAL"))
                 playMusical();
             else

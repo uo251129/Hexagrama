@@ -7,120 +7,143 @@
     tools:context=".MenuActivity">
 
     <LinearLayout
-        android:id="@+id/menuLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/txtInitialInstructions"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/screen_narrator"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <RadioGroup
-            android:id="@+id/rbInstructions"
+        <LinearLayout
+            android:id="@+id/menuLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/rbDesactivateInst"
+            <TextView
+                android:id="@+id/txtInitialInstructions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="changeInitialInstructions"
-                android:text="@string/desactivate" />
+                android:text="@string/screen_narrator"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle" />
 
-            <RadioButton
-                android:id="@+id/rbActivateInst"
+            <RadioGroup
+                android:id="@+id/rbInstructions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="changeInitialInstructions"
-                android:text="@string/activate" />
-        </RadioGroup>
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/txtOutputType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/output_type"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+                <RadioButton
+                    android:id="@+id/rbDesactivateInst"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="changeInitialInstructions"
+                    android:text="@string/desactivate" />
 
-        <RadioGroup
-            android:id="@+id/rbOutput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/rbActivateInst"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="changeInitialInstructions"
+                    android:text="@string/activate" />
+            </RadioGroup>
 
-            <RadioButton
-                android:id="@+id/rbNarrator"
+            <TextView
+                android:id="@+id/txtOutputType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="changeOutputType"
-                android:text="@string/narrator" />
+                android:text="@string/output_type"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle" />
 
-            <RadioButton
-                android:id="@+id/rbMusic"
+            <RadioGroup
+                android:id="@+id/rbOutput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="changeOutputType"
-                android:text="@string/musical" />
-        </RadioGroup>
+                android:orientation="horizontal">
 
+                <RadioButton
+                    android:id="@+id/rbNarrator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="changeOutputType"
+                    android:text="@string/narrator" />
+
+                <RadioButton
+                    android:id="@+id/rbMusic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="changeOutputType"
+                    android:text="@string/musical" />
+            </RadioGroup>
+
+        </LinearLayout>
     </LinearLayout>
 
     <ImageButton
         android:id="@+id/backButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="7dp"
+        android:backgroundTint="@color/transparent"
         android:onClick="backCamera"
-        app:srcCompat="@drawable/backtrack" />
+        app:srcCompat="@drawable/backtrack_black" />
 
     <ImageButton
         android:id="@+id/nextButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/backButton"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="239dp"
-        android:layout_marginEnd="95dp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginStart="238dp"
+        android:layout_marginEnd="96dp"
+        android:layout_marginBottom="7dp"
+        android:backgroundTint="@color/transparent"
         android:onClick="nextOption"
         app:srcCompat="@drawable/next" />
 
     <ImageButton
         android:id="@+id/previousButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/backButton"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="99dp"
-        android:layout_marginEnd="235dp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginEnd="233dp"
+        android:layout_marginBottom="7dp"
+        android:backgroundTint="@color/transparent"
         android:onClick="previousOption"
         app:srcCompat="@drawable/previous" />
 
     <ImageButton
         android:id="@+id/selectButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/backButton"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="170dp"
-        android:layout_marginEnd="164dp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginStart="168dp"
+        android:layout_marginEnd="166dp"
+        android:layout_marginBottom="7dp"
+        android:backgroundTint="@color/transparent"
         android:onClick="selectOption"
         app:srcCompat="@drawable/done" />
 
