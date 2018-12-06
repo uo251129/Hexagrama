@@ -22,8 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StaveActivity" />
-        <activity android:name=".MenuActivity"></activity>
+        <activity android:name=".StaveActivity" android:screenOrientation="portrait" />
+        <activity android:name=".MenuActivity" android:screenOrientation="portrait" />
     </application>
 
 </manifest>
