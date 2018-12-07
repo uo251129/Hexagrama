@@ -10,6 +10,8 @@
     <string name="musical">Musical</string>
     <string name="narrator">Narrador</string>
     <string name="configuracion">Configuración</string>
+    <string name="comprobandoconexion">Comprobando conexión a internet</string>
+    <string name="errorconexion">No tienes conexión a internet</string>
     <string name="initial_instructions_speak">Bienvenido a hexagrama. Para acceder al menú de
     configuración haga click en la parte inferior izquierda de la pantalla. Para capturar un
     pentagrama haga click en la parte inferior central. Para cargar un pentagrama
@@ -22,4 +24,8 @@
     de cuatro botones. El primero en la izquierda permite volver a una opción del menú.
     El segundo le permite seleccionar la configuración. El tercero le permite continuar con
     otra opción del menú. El último botón le permite volver atrás.</string>
+
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -78,6 +79,9 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
                 getApplicationContext().MODE_PRIVATE);
         tts = new TextToSpeech(this,this);
         mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.prepare();
+        } catch (Exception e) {}
     }
 
     private View.OnClickListener backListener = new View.OnClickListener() {
@@ -100,63 +104,81 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
     }
 
     public void playStave(View view) {
-        if(!isPlaying) {
-            isPlaying = true;
-            playButton.setImageResource(R.drawable.stop);
-            if (sharedPreferences.getString("TIPO_SALIDA", "MUSICAL").equals("MUSICAL"))
-                playMusical();
-            else
-                playVoice();
+        tts.stop();
+        playButton.setImageResource(R.drawable.stop);
 
-            //Ends
-            isPlaying = false;
-            playButton.setImageResource(R.drawable.play);
-        } else {
-            isPlaying = false;
-            playButton.setImageResource(R.drawable.play);
-            tts.stop();
-            mediaPlayer.stop();
+        if (sharedPreferences.getString("TIPO_SALIDA", "MUSICAL").equals("MUSICAL")) {
+            playMusical();
+            //playButton.setImageResource(R.drawable.play);
+        }  else {
+            isPlaying = true;
+            playVoice();
+            //playButton.setImageResource(R.drawable.play);
         }
+
+        //Ends
+        isPlaying = false;
+    }
+
+    public void stopStave(View view) {
+
     }
 
     private void playMusical() {
+        //mediaPlayer.stop();
+        List<MediaPlayer> mps = new ArrayList<MediaPlayer>();
         for (String note: notes) {
-            switch (note) {
-                case ("do"):
-                    Log.i("nota","Do");
-                    mediaPlayer = MediaPlayer.create(this, R.raw.pianoc);
-                    break;
-                case ("re"):
-                    mediaPlayer = MediaPlayer.create(this, R.raw.pianod);
-                    Log.i("nota","Re");
-                    break;
-                case ("mi"):
-                    mediaPlayer = MediaPlayer.create(this, R.raw.pianoe);
-                    Log.i("nota","Mi");
-                    break;
-                case ("fa"):
-                    mediaPlayer = MediaPlayer.create(this, R.raw.pianof);
-                    Log.i("nota","Fa");
-                    break;
-                case ("sol"):
-                    mediaPlayer = MediaPlayer.create(this, R.raw.pianog);
-                    Log.i("nota","Sol");
-                    break;
-                case ("la"):
-                    mediaPlayer = MediaPlayer.create(this, R.raw.pianoa);
-                    Log.i("nota","La");
-                    break;
-                case ("si"):
-                    mediaPlayer = MediaPlayer.create(this, R.raw.pianob);
-                    Log.i("nota","Si");
-                    break;
-            }
-            mediaPlayer.start();
+            mps.add(reproduceNoteMusic(note));
+            //mediaPlayer.start();
+            //try {TimeUnit.MILLISECONDS.sleep(500);}
+            //catch (Exception e) {}
+            //mediaPlayer.stop();
+            //mediaPlayer.reset();
+        }
+        //mediaPlayer.start();
+        for (MediaPlayer mp : mps) {
+            mp.prepareAsync();
+            mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+                @Override
+                public void onPrepared(MediaPlayer player) {
+                    player.start();
+                }
+
+            });
+            //mp.start();
             try {TimeUnit.MILLISECONDS.sleep(500);}
             catch (Exception e) {}
-            mediaPlayer.stop();
-            mediaPlayer.reset();
         }
+    }
+
+    private MediaPlayer reproduceNoteMusic(String note) {
+        MediaPlayer mediaPlayerAux = new MediaPlayer();
+        switch (note) {
+            case ("do"):
+                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianoc);
+                break;
+            case ("re"):
+                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianod);
+                break;
+            case ("mi"):
+                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianoe);
+                break;
+            case ("fa"):
+                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianof);
+                break;
+            case ("sol"):
+                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianog);
+                break;
+            case ("la"):
+                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianoa);
+                break;
+            case ("si"):
+                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianob);
+                break;
+        }
+
+        return mediaPlayerAux;
     }
 
     private  void playVoice() {
