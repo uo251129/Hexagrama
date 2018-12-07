@@ -137,16 +137,7 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
         }
         //mediaPlayer.start();
         for (MediaPlayer mp : mps) {
-            mp.prepareAsync();
-            mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-                @Override
-                public void onPrepared(MediaPlayer player) {
-                    player.start();
-                }
-
-            });
-            //mp.start();
+            mp.start();
             try {TimeUnit.MILLISECONDS.sleep(500);}
             catch (Exception e) {}
         }
