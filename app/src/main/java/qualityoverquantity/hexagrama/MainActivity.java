@@ -105,16 +105,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 speak("Cargar pentagrama.");
             }
             startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
-
-            Bitmap bitmap = textureView.getBitmap();
-            Uri selectedImage = getImageUri(MainActivity.this, bitmap);
-            //Request is sended before open next activity
-            ArrayList<String> notes = restRequestSender.sendRequest(bitmap);
-
-            staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
-            staveIntent.putExtra("staveImage",	selectedImage.toString());
-            staveIntent.putStringArrayListExtra("notes", notes);
-            startActivity(staveIntent);
         }
     };
 
