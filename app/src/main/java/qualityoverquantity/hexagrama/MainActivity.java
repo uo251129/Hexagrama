@@ -34,6 +34,8 @@ import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -77,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private Intent menuIntent;
 
     private ImageButton buttonCamera;
+    private ProgressBar progressBar;
+    private TextView txProcessing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +96,9 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
         buttonCamera = (ImageButton)findViewById(R.id.cameraButton);
         buttonCamera.setOnClickListener(cameraListener);
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        txProcessing = (TextView) findViewById(R.id.txtProcesando);
 
         sharedPreferences = getSharedPreferences("MyPreferences",
                 getApplicationContext().MODE_PRIVATE);
@@ -124,12 +131,16 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
                 staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
                 staveIntent.putExtra("staveImage",	selectedImage.toString());
+                progressBar.setVisibility(View.VISIBLE);
+                txProcessing.setVisibility(View.VISIBLE);
 
                 //Request is sended before open next activity
                 restRequestSender.sendRequest(MainActivity.this, bitmap,
                         new VolleyCallBack() {
                             @Override
                             public void onSuccess() {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                txProcessing.setVisibility(View.INVISIBLE);
                                 startActivity(staveIntent);
                             }
                         });
@@ -177,11 +188,15 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
                 staveIntent.putExtra("staveImage",	selectedImage.toString());
+                progressBar.setVisibility(View.VISIBLE);
+                txProcessing.setVisibility(View.VISIBLE);
 
                 restRequestSender.sendRequest(MainActivity.this, bitmap,
                         new VolleyCallBack() {
                             @Override
                             public void onSuccess() {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                txProcessing.setVisibility(View.INVISIBLE);
                                 startActivity(staveIntent);
                             }
                         });

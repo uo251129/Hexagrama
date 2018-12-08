@@ -10,6 +10,7 @@
     <string name="musical">Musical</string>
     <string name="narrator">Narrador</string>
     <string name="configuracion">Configuración</string>
+    <string name="procesando">Se está procesando el pentagrama.</string>
     <string name="comprobandoconexion">Comprobando conexión a internet</string>
     <string name="errorconexion">No tienes conexión a internet</string>
     <string name="initial_instructions_speak">Bienvenido a hexagrama. Para acceder al menú de

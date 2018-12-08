@@ -52,4 +52,32 @@
         app:rippleColor="@color/colorAccent"
         app:srcCompat="@drawable/camera" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="243dp"
+        android:layout_marginBottom="276dp"
+        android:max="100"
+        android:minWidth="100dp"
+        android:minHeight="100dp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/txtProcesando"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="301dp"
+        android:layout_marginBottom="248dp"
+        android:text="@string/procesando"
+        android:textColor="@android:color/black"
+        android:visibility="invisible" />
+
 </RelativeLayout>

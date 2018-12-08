@@ -48,7 +48,6 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
 
         parameters = getIntent();
-        //notes = parameters.getStringArrayListExtra("notes");
         Uri selectedImage = Uri.parse(parameters.getStringExtra("staveImage"));
         try {
             staveImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);

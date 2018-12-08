@@ -6,6 +6,7 @@ import android.support.constraint.solver.Cache;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -56,7 +57,7 @@ public class RESTRequestSender {
     }
 
     //InputStream is for testing purpose.
-    public ArrayList<String> sendRequest(Context context, Bitmap image, final VolleyCallBack callBack) {
+    public void sendRequest(Context context, Bitmap image, final VolleyCallBack callBack) {
         try {
             this.context = context;
             this.requestQueue = Volley.newRequestQueue(context);
@@ -112,10 +113,8 @@ public class RESTRequestSender {
             // Add the request we just defined to our request queue.
             // The request queue will automatically handle the request as soon as it can.
             requestQueue.add(arrReq);
-            return notes;
         } catch (Exception e) {
             Log.e("Request",e.getMessage());
-            return null;
         }
     }
 
