@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -16,9 +17,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.apache.http.params.HttpConnectionParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,20 +40,27 @@ import java.util.Map;
 
 public class RESTRequestSender {
     private RequestQueue requestQueue;
-    private String baseUrl;
+    private String baseUrl = "http://192.168.1.102:8080/audiveris/json";
     private Context context;
-    private ArrayList<String> notes;
+    public ArrayList<String> notes = new ArrayList<String>();
 
-    public RESTRequestSender(Context context) {
-        this.context = context;
-        this.requestQueue = Volley.newRequestQueue(context);
-        this.baseUrl = "http://192.168.1.102:8080/audiveris/json";
-        notes = new ArrayList<String>();
+    private static RESTRequestSender instance;
+
+    private RESTRequestSender() {}
+
+    public static RESTRequestSender getInstance() {
+        if(instance == null) {
+            instance = new RESTRequestSender();
+        }
+        return instance;
     }
 
     //InputStream is for testing purpose.
-    public ArrayList<String> sendRequest(Bitmap image) {
+    public ArrayList<String> sendRequest(Context context, Bitmap image, final VolleyCallBack callBack) {
         try {
+            this.context = context;
+            this.requestQueue = Volley.newRequestQueue(context);
+
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("image", bitMapToString(image));
             Log.i("body",jsonBody.toString());
@@ -63,6 +74,9 @@ public class RESTRequestSender {
                             if (response.length() > 0) {
                                 Log.i("Request",response);
                                 notes = obtainNotes(response);
+                                Log.i("Request",notes.toString());
+
+                                callBack.onSuccess();
                             } else {
                                 // The user didn't have any repos.
                                 Log.e("Request", "Response is not correct or empty.");
@@ -90,10 +104,14 @@ public class RESTRequestSender {
                 }
 
             };
+
+            arrReq.setRetryPolicy(new DefaultRetryPolicy(
+                    50000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             // Add the request we just defined to our request queue.
             // The request queue will automatically handle the request as soon as it can.
             requestQueue.add(arrReq);
-
             return notes;
         } catch (Exception e) {
             Log.e("Request",e.getMessage());
@@ -104,7 +122,7 @@ public class RESTRequestSender {
     private ArrayList<String> obtainNotes(String s) {
         Log.i("Notes",s);
         ArrayList<String> notes = new ArrayList<String>();
-        String[] lineSplit = s.split(",");
+        String[] lineSplit = s.split(", ");
         for (String note: lineSplit) notes.add(note);
         for(String note : notes) Log.i("Notes", note);
         return notes;

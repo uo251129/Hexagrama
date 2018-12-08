@@ -49,6 +49,7 @@
         app:backgroundTint="@color/whiteTransparent"
         app:fabCustomSize="60dp"
         app:fabSize="normal"
+        app:rippleColor="@color/colorAccent"
         app:srcCompat="@drawable/camera" />
 
 </RelativeLayout>

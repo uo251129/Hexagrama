@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.media.MediaPlayer;
+import android.media.midi.MidiManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -26,6 +27,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import qualityoverquantity.hexagrama.util.RESTRequestSender;
+
 public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
     private Intent parameters;
     private Bitmap staveImage;
@@ -45,20 +48,7 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
 
         parameters = getIntent();
-        notes = parameters.getStringArrayListExtra("notes");
-        //TESTING
-        /*
-        notes = new ArrayList<String>();
-        notes.add("do");
-        notes.add("re");
-        notes.add("mi");
-        notes.add("fa");
-        notes.add("sol");
-        notes.add("la");
-        notes.add("si");
-        notes.add("do");
-        */
-        //
+        //notes = parameters.getStringArrayListExtra("notes");
         Uri selectedImage = Uri.parse(parameters.getStringExtra("staveImage"));
         try {
             staveImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
@@ -66,10 +56,9 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
             e.printStackTrace();
         }
 
-        //Display display = getWindowManager().getDefaultDisplay();
-        //Point size = new Point();
-        //display.getSize(size);
-        //staveImage = Bitmap.createScaledBitmap(staveImage,size.x, size.y, true);
+        RESTRequestSender restRequestSender = RESTRequestSender.getInstance();
+        this.notes = restRequestSender.notes;
+
         imageView.setImageBitmap(staveImage);
 
         ImageButton button = (ImageButton)findViewById(R.id.backButton);
@@ -127,21 +116,15 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
     }
 
     private void playMusical() {
-        //mediaPlayer.stop();
         List<MediaPlayer> mps = new ArrayList<MediaPlayer>();
         for (String note: notes) {
             mps.add(reproduceNoteMusic(note));
-            //mediaPlayer.start();
-            //try {TimeUnit.MILLISECONDS.sleep(500);}
-            //catch (Exception e) {}
-            //mediaPlayer.stop();
-            //mediaPlayer.reset();
         }
-        //mediaPlayer.start();
         for (MediaPlayer mp : mps) {
             mp.start();
-            try {TimeUnit.MILLISECONDS.sleep(500);}
+            try {TimeUnit.MILLISECONDS.sleep(1000);}
             catch (Exception e) {}
+            mp.reset();
         }
     }
 

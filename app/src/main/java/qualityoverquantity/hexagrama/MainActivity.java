@@ -50,6 +50,7 @@ import java.util.concurrent.TimeUnit;
 
 import qualityoverquantity.hexagrama.util.RESTRequestSender;
 import qualityoverquantity.hexagrama.util.State;
+import qualityoverquantity.hexagrama.util.VolleyCallBack;
 
 public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
     public static final int GET_FROM_GALLERY = 1;
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         sharedPreferences = getSharedPreferences("MyPreferences",
                 getApplicationContext().MODE_PRIVATE);
         tts = new TextToSpeech(this,this);
-        restRequestSender = new RESTRequestSender(this);
+        restRequestSender = RESTRequestSender.getInstance();
     }
 
     private View.OnClickListener uploadListener = new View.OnClickListener() {
@@ -121,13 +122,17 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 Bitmap bitmap = textureView.getBitmap();
                 Uri selectedImage = getImageUri(MainActivity.this, bitmap);
 
-                //Request is sended before open next activity
-                ArrayList<String> notes = restRequestSender.sendRequest(bitmap);
-
                 staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
                 staveIntent.putExtra("staveImage",	selectedImage.toString());
-                staveIntent.putStringArrayListExtra("notes", notes);
-                startActivity(staveIntent);
+
+                //Request is sended before open next activity
+                restRequestSender.sendRequest(MainActivity.this, bitmap,
+                        new VolleyCallBack() {
+                            @Override
+                            public void onSuccess() {
+                                startActivity(staveIntent);
+                            }
+                        });
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -167,9 +172,22 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
         if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
-            staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
-            staveIntent.putExtra("staveImage",	selectedImage.toString());
-            startActivity(staveIntent);
+            Bitmap bitmap;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
+                staveIntent.putExtra("staveImage",	selectedImage.toString());
+
+                restRequestSender.sendRequest(MainActivity.this, bitmap,
+                        new VolleyCallBack() {
+                            @Override
+                            public void onSuccess() {
+                                startActivity(staveIntent);
+                            }
+                        });
+
+
+            } catch (IOException i) {}
         }
     }
 
