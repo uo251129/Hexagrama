@@ -8,10 +8,13 @@ import android.util.Log;
 import android.view.View;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -27,7 +30,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RESTRequestSender {
     private RequestQueue requestQueue;
@@ -38,7 +43,7 @@ public class RESTRequestSender {
     public RESTRequestSender(Context context) {
         this.context = context;
         this.requestQueue = Volley.newRequestQueue(context);
-        this.baseUrl = "";
+        this.baseUrl = "http://192.168.1.102:8080/audiveris/json";
         notes = new ArrayList<String>();
     }
 
@@ -46,7 +51,8 @@ public class RESTRequestSender {
     public ArrayList<String> sendRequest(Bitmap image) {
         try {
             JSONObject jsonBody = new JSONObject();
-            jsonBody.put("Pentagrama", bitMapToString(image));
+            jsonBody.put("image", bitMapToString(image));
+            Log.i("body",jsonBody.toString());
             final String requestBody = jsonBody.toString();
 
             StringRequest arrReq = new StringRequest(Request.Method.POST, baseUrl,
@@ -55,6 +61,7 @@ public class RESTRequestSender {
                         public void onResponse(String response) {
                             // Check the length of our response (to see if the user has any repos)
                             if (response.length() > 0) {
+                                Log.i("Request",response);
                                 notes = obtainNotes(response);
                             } else {
                                 // The user didn't have any repos.
@@ -65,7 +72,7 @@ public class RESTRequestSender {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.e("Volley", error.toString());
+                            Log.e("Request", error.toString());
                         }
                     }) {
                 @Override
@@ -76,6 +83,12 @@ public class RESTRequestSender {
                         return null;
                     }
                 }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
             };
             // Add the request we just defined to our request queue.
             // The request queue will automatically handle the request as soon as it can.
@@ -83,6 +96,7 @@ public class RESTRequestSender {
 
             return notes;
         } catch (Exception e) {
+            Log.e("Request",e.getMessage());
             return null;
         }
     }
@@ -100,7 +114,7 @@ public class RESTRequestSender {
         ByteArrayOutputStream baos=new  ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
         byte [] b=baos.toByteArray();
-        String temp=Base64.encodeToString(b, Base64.DEFAULT);
+        String temp=Base64.encodeToString(b, Base64.NO_WRAP);
         return temp;
     }
 }

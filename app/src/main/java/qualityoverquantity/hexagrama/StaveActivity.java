@@ -45,8 +45,9 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
 
         parameters = getIntent();
-        //notes = parameters.getStringArrayListExtra("notes");
+        notes = parameters.getStringArrayListExtra("notes");
         //TESTING
+        /*
         notes = new ArrayList<String>();
         notes.add("do");
         notes.add("re");
@@ -56,6 +57,7 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
         notes.add("la");
         notes.add("si");
         notes.add("do");
+        */
         //
         Uri selectedImage = Uri.parse(parameters.getStringExtra("staveImage"));
         try {
@@ -146,25 +148,25 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
     private MediaPlayer reproduceNoteMusic(String note) {
         MediaPlayer mediaPlayerAux = new MediaPlayer();
         switch (note) {
-            case ("do"):
+            case ("C"):
                 mediaPlayerAux = MediaPlayer.create(this, R.raw.pianoc);
                 break;
-            case ("re"):
+            case ("D"):
                 mediaPlayerAux = MediaPlayer.create(this, R.raw.pianod);
                 break;
-            case ("mi"):
+            case ("E"):
                 mediaPlayerAux = MediaPlayer.create(this, R.raw.pianoe);
                 break;
-            case ("fa"):
+            case ("F"):
                 mediaPlayerAux = MediaPlayer.create(this, R.raw.pianof);
                 break;
-            case ("sol"):
+            case ("G"):
                 mediaPlayerAux = MediaPlayer.create(this, R.raw.pianog);
                 break;
-            case ("la"):
+            case ("A"):
                 mediaPlayerAux = MediaPlayer.create(this, R.raw.pianoa);
                 break;
-            case ("si"):
+            case ("B"):
                 mediaPlayerAux = MediaPlayer.create(this, R.raw.pianob);
                 break;
         }
