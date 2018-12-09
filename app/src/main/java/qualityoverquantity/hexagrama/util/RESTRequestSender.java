@@ -41,7 +41,7 @@ import java.util.Map;
 
 public class RESTRequestSender {
     private RequestQueue requestQueue;
-    private String baseUrl = "http://192.168.1.102:8080/audiveris/json";
+    private String baseUrl = "http://18.219.223.60:8080/audiveris/json";
     private Context context;
     public ArrayList<String> notes = new ArrayList<String>();
 
@@ -88,6 +88,7 @@ public class RESTRequestSender {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Log.e("Request", error.toString());
+                            callBack.onError();
                         }
                     }) {
                 @Override

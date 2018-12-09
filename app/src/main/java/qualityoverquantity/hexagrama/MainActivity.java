@@ -143,6 +143,19 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                                 txProcessing.setVisibility(View.INVISIBLE);
                                 startActivity(staveIntent);
                             }
+
+                            @Override
+                            public void onError() {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                txProcessing.setTextColor(Color.RED);
+                                txProcessing.setText("No se ha podido transformar el pentagrama.");
+
+                                txProcessing.postDelayed(new Runnable() {
+                                    public void run() {
+                                        txProcessing.setVisibility(View.INVISIBLE);
+                                    }
+                                }, 5000);
+                            }
                         });
             } catch (Exception e) {
                 e.printStackTrace();
@@ -198,6 +211,19 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                                 progressBar.setVisibility(View.INVISIBLE);
                                 txProcessing.setVisibility(View.INVISIBLE);
                                 startActivity(staveIntent);
+                            }
+
+                            @Override
+                            public void onError() {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                txProcessing.setTextColor(Color.RED);
+                                txProcessing.setText("No se ha podido transformar el pentagrama.");
+
+                                txProcessing.postDelayed(new Runnable() {
+                                    public void run() {
+                                        txProcessing.setVisibility(View.INVISIBLE);
+                                    }
+                                }, 5000);
                             }
                         });
 
