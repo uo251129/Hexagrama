@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 buttonCamera.setBackgroundColor(Color.GRAY);
                 if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
                     tts.stop();
-                    speak("Capturar pentagrama.");
+                    speak("Capturar pentagrama. Se está procesando el pentagrama.");
                 }
                 Bitmap bitmap = textureView.getBitmap();
                 Uri selectedImage = getImageUri(MainActivity.this, bitmap);
@@ -141,6 +141,12 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                             public void onSuccess() {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 txProcessing.setVisibility(View.INVISIBLE);
+
+                                if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
+                                    tts.stop();
+                                    speak("Transformado correctamente.");
+                                }
+
                                 startActivity(staveIntent);
                             }
 
@@ -155,6 +161,11 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                                         txProcessing.setVisibility(View.INVISIBLE);
                                     }
                                 }, 5000);
+
+                                if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
+                                    tts.stop();
+                                    speak("No se ha podido transformar el pentagrama.");
+                                }
                             }
                         });
             } catch (Exception e) {
@@ -199,6 +210,12 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             Bitmap bitmap;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+
+                if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
+                    tts.stop();
+                    speak("Imagen cargada. Se está procesando el pentagrama.");
+                }
+
                 staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
                 staveIntent.putExtra("staveImage",	selectedImage.toString());
                 progressBar.setVisibility(View.VISIBLE);
@@ -210,6 +227,12 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                             public void onSuccess() {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 txProcessing.setVisibility(View.INVISIBLE);
+
+                                if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
+                                    tts.stop();
+                                    speak("Transformado correctamente.");
+                                }
+
                                 startActivity(staveIntent);
                             }
 
@@ -224,6 +247,11 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                                         txProcessing.setVisibility(View.INVISIBLE);
                                     }
                                 }, 5000);
+
+                                if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
+                                    tts.stop();
+                                    speak("No se ha podido transformar el pentagrama.");
+                                }
                             }
                         });
 
