@@ -103,15 +103,11 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
         }  else {
             isPlaying = true;
             playVoice();
-            //playButton.setImageResource(R.drawable.play);
+            playButton.setImageResource(R.drawable.play);
         }
 
         //Ends
         isPlaying = false;
-    }
-
-    public void stopStave(View view) {
-
     }
 
     private void playMusical() {
@@ -158,7 +154,28 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
 
     private  void playVoice() {
         for(String note: notes)
-            speak(note);
+            speak(convertToLatinNote(note));
+    }
+
+    private String convertToLatinNote(String note) {
+        switch (note) {
+            case ("C"):
+                return "Do";
+            case ("D"):
+                return "Re";
+            case ("E"):
+                return "Mi";
+            case ("F"):
+                return "Fa";
+            case ("G"):
+                return "Sol";
+            case ("A"):
+                return "La";
+            case ("B"):
+                return "Si";
+        }
+
+        return "";
     }
 
     @Override
