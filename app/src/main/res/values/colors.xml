@@ -7,4 +7,5 @@
     <color name="transparent">#00ffffff</color>
 
     <color name="black_overlay">#bc232222</color>
+    <color name="text">#3606b1</color>
 </resources>

@@ -49,7 +49,7 @@
         app:backgroundTint="@color/whiteTransparent"
         app:fabCustomSize="60dp"
         app:fabSize="normal"
-        app:rippleColor="@color/colorAccent"
+        app:rippleColor="@android:color/holo_purple"
         app:srcCompat="@drawable/camera" />
 
     <ProgressBar
@@ -57,11 +57,11 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/txtProcesando"
         android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="243dp"
-        android:layout_marginBottom="276dp"
+        android:layout_marginTop="185dp"
+        android:layout_marginBottom="72dp"
         android:max="100"
         android:minWidth="100dp"
         android:minHeight="100dp"
@@ -71,13 +71,13 @@
         android:id="@+id/txtProcesando"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="301dp"
-        android:layout_marginBottom="248dp"
+        android:layout_marginBottom="194dp"
         android:text="@string/procesando"
-        android:textColor="@android:color/black"
+        android:textAlignment="center"
+        android:textColor="@color/text"
+        android:textSize="18sp"
         android:visibility="invisible" />
 
 </RelativeLayout>

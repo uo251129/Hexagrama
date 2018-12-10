@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private	Intent	staveIntent;
     private Intent menuIntent;
 
-    private ImageButton buttonCamera;
+    private ImageButton buttonCamera, buttonMenu, buttonUpdate;
     private ProgressBar progressBar;
     private TextView txProcessing;
 
@@ -91,11 +91,13 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
         textureView.setSurfaceTextureListener(surfaceTextureListener);
 
-        ImageButton button = (ImageButton)findViewById(R.id.uploadButton);
-        button.setOnClickListener(uploadListener);
+        buttonUpdate= (ImageButton)findViewById(R.id.uploadButton);
+        buttonUpdate.setOnClickListener(uploadListener);
 
         buttonCamera = (ImageButton)findViewById(R.id.cameraButton);
         buttonCamera.setOnClickListener(cameraListener);
+
+        buttonMenu = (ImageButton)findViewById(R.id.menuButton);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         txProcessing = (TextView) findViewById(R.id.txtProcesando);
@@ -124,48 +126,29 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 buttonCamera.setBackgroundColor(Color.GRAY);
                 if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
                     tts.stop();
-                    speak("Capturar pentagrama. Se está procesando el pentagrama.");
+                    speak("Capturar pentagrama.");
                 }
                 Bitmap bitmap = textureView.getBitmap();
                 Uri selectedImage = getImageUri(MainActivity.this, bitmap);
 
                 staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
                 staveIntent.putExtra("staveImage",	selectedImage.toString());
-                progressBar.setVisibility(View.VISIBLE);
-                txProcessing.setVisibility(View.VISIBLE);
 
-                //Request is sended before open next activity
+                processing();
+
                 restRequestSender.sendRequest(MainActivity.this, bitmap,
                         new VolleyCallBack() {
                             @Override
                             public void onSuccess() {
-                                progressBar.setVisibility(View.INVISIBLE);
-                                txProcessing.setVisibility(View.INVISIBLE);
-
-                                if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
-                                    tts.stop();
-                                    speak("Transformado correctamente.");
-                                }
-
-                                startActivity(staveIntent);
+                                if(RESTRequestSender.getInstance().notes != null) {
+                                    success();
+                                    startActivity(staveIntent);
+                                } else errorMessage();
                             }
 
                             @Override
                             public void onError() {
-                                progressBar.setVisibility(View.INVISIBLE);
-                                txProcessing.setTextColor(Color.RED);
-                                txProcessing.setText("No se ha podido transformar el pentagrama.");
-
-                                txProcessing.postDelayed(new Runnable() {
-                                    public void run() {
-                                        txProcessing.setVisibility(View.INVISIBLE);
-                                    }
-                                }, 5000);
-
-                                if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
-                                    tts.stop();
-                                    speak("No se ha podido transformar el pentagrama.");
-                                }
+                                errorMessage();
                             }
                         });
             } catch (Exception e) {
@@ -213,45 +196,27 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
                 if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
                     tts.stop();
-                    speak("Imagen cargada. Se está procesando el pentagrama.");
+                    speak("Imagen cargada.");
                 }
 
                 staveIntent	=	new	Intent(MainActivity.this,StaveActivity.class);
                 staveIntent.putExtra("staveImage",	selectedImage.toString());
-                progressBar.setVisibility(View.VISIBLE);
-                txProcessing.setVisibility(View.VISIBLE);
+
+                processing();
 
                 restRequestSender.sendRequest(MainActivity.this, bitmap,
                         new VolleyCallBack() {
                             @Override
                             public void onSuccess() {
-                                progressBar.setVisibility(View.INVISIBLE);
-                                txProcessing.setVisibility(View.INVISIBLE);
-
-                                if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
-                                    tts.stop();
-                                    speak("Transformado correctamente.");
-                                }
-
-                                startActivity(staveIntent);
+                                if(RESTRequestSender.getInstance().notes != null) {
+                                    success();
+                                    startActivity(staveIntent);
+                                } else errorMessage();
                             }
 
                             @Override
                             public void onError() {
-                                progressBar.setVisibility(View.INVISIBLE);
-                                txProcessing.setTextColor(Color.RED);
-                                txProcessing.setText("No se ha podido transformar el pentagrama.");
-
-                                txProcessing.postDelayed(new Runnable() {
-                                    public void run() {
-                                        txProcessing.setVisibility(View.INVISIBLE);
-                                    }
-                                }, 5000);
-
-                                if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
-                                    tts.stop();
-                                    speak("No se ha podido transformar el pentagrama.");
-                                }
+                                errorMessage();
                             }
                         });
 
@@ -444,5 +409,53 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     protected void onDestroy() {
         if (tts.isSpeaking()) tts.stop();
         super.onDestroy();
+    }
+
+    private void errorMessage() {
+        progressBar.setVisibility(View.INVISIBLE);
+        txProcessing.setTextColor(Color.RED);
+        txProcessing.setText(getResources().getString(R.string.errortransformar));
+        buttonCamera.setEnabled(true);
+        buttonMenu.setEnabled(true);
+        buttonUpdate.setEnabled(true);
+
+        txProcessing.postDelayed(new Runnable() {
+            public void run() {
+                txProcessing.setVisibility(View.INVISIBLE);
+            }
+        }, 5000);
+
+        if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
+            tts.stop();
+            speak(getResources().getString(R.string.errortransformar));
+        }
+
+        txProcessing.setTextColor(getResources().getColor(R.color.text));
+        txProcessing.setText(getResources().getString(R.string.procesando));
+    }
+
+    private void processing() {
+        if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
+            speak(getResources().getString(R.string.procesando));
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
+        txProcessing.setVisibility(View.VISIBLE);
+        buttonCamera.setEnabled(false);
+        buttonMenu.setEnabled(false);
+        buttonUpdate.setEnabled(false);
+    }
+
+    private void success() {
+        progressBar.setVisibility(View.INVISIBLE);
+        txProcessing.setVisibility(View.INVISIBLE);
+        buttonCamera.setEnabled(true);
+        buttonMenu.setEnabled(true);
+        buttonUpdate.setEnabled(true);
+
+        if(sharedPreferences.getBoolean("NARRADOR_PANTALLA",true)) {
+            tts.stop();
+            speak("Transformado correctamente.");
+        }
     }
 }

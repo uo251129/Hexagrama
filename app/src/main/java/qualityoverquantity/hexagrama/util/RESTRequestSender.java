@@ -108,7 +108,7 @@ public class RESTRequestSender {
             };
 
             arrReq.setRetryPolicy(new DefaultRetryPolicy(
-                    50000,
+                    40000,
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             // Add the request we just defined to our request queue.
