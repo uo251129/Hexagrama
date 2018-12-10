@@ -41,7 +41,7 @@ import java.util.Map;
 
 public class RESTRequestSender {
     private RequestQueue requestQueue;
-    private String baseUrl = "http://3.16.160.219:80/audiveris/json";
+    private String baseUrl = "http://18.218.59.101:80/audiveris/json";
     private Context context;
     public ArrayList<String> notes = new ArrayList<String>();
 
