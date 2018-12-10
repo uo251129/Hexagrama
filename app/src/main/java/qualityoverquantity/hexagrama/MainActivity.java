@@ -33,7 +33,6 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -41,17 +40,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import qualityoverquantity.hexagrama.util.RESTRequestSender;
-import qualityoverquantity.hexagrama.util.State;
 import qualityoverquantity.hexagrama.util.VolleyCallBack;
 
 public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {

@@ -1,24 +1,19 @@
 package qualityoverquantity.hexagrama;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.RadioButton;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import qualityoverquantity.hexagrama.util.State;
 
 public class MenuActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 

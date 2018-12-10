@@ -28,6 +28,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import qualityoverquantity.hexagrama.util.RESTRequestSender;
+import qualityoverquantity.hexagrama.util.ReproductionTask;
 
 public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
     private Intent parameters;
@@ -95,66 +96,31 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
 
     public void playStave(View view) {
         tts.stop();
-        playButton.setImageResource(R.drawable.stop);
 
-        if (sharedPreferences.getString("TIPO_SALIDA", "MUSICAL").equals("MUSICAL")) {
-            playMusical();
-            //playButton.setImageResource(R.drawable.play);
-        }  else {
-            isPlaying = true;
-            playVoice();
+        if(isPlaying) {
+            isPlaying = false;
             playButton.setImageResource(R.drawable.play);
+        } else if (sharedPreferences.getString("TIPO_SALIDA", "MUSICAL").equals("MUSICAL")) {
+            playMusical();
+        }  else {
+            playVoice();
         }
-
-        //Ends
-        isPlaying = false;
     }
 
     private void playMusical() {
-        List<MediaPlayer> mps = new ArrayList<MediaPlayer>();
-        for (String note: notes) {
-            mps.add(reproduceNoteMusic(note));
-        }
-        for (MediaPlayer mp : mps) {
-            mp.start();
-            try {TimeUnit.MILLISECONDS.sleep(1000);}
-            catch (Exception e) {}
-            mp.reset();
-        }
+        isPlaying = true;
+        playButton.setImageResource(R.drawable.stop);
+        new ReproductionTask(this,mediaPlayer,notes).execute("1","2","3");
     }
 
-    private MediaPlayer reproduceNoteMusic(String note) {
-        MediaPlayer mediaPlayerAux = new MediaPlayer();
-        switch (note) {
-            case ("C"):
-                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianoc);
-                break;
-            case ("D"):
-                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianod);
-                break;
-            case ("E"):
-                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianoe);
-                break;
-            case ("F"):
-                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianof);
-                break;
-            case ("G"):
-                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianog);
-                break;
-            case ("A"):
-                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianoa);
-                break;
-            case ("B"):
-                mediaPlayerAux = MediaPlayer.create(this, R.raw.pianob);
-                break;
-        }
 
-        return mediaPlayerAux;
-    }
 
     private  void playVoice() {
+        isPlaying = true;
+        playButton.setImageResource(R.drawable.stop);
         for(String note: notes)
             speak(convertToLatinNote(note));
+        playButton.setImageResource(R.drawable.play);
     }
 
     private String convertToLatinNote(String note) {
@@ -211,5 +177,9 @@ public class StaveActivity extends AppCompatActivity implements TextToSpeech.OnI
         mediaPlayer.reset();
         if (tts.isSpeaking()) tts.stop();
         super.onPause();
+    }
+
+    public boolean isPaused() {
+        return !this.isPlaying;
     }
 }
